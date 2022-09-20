@@ -864,6 +864,89 @@
           "response": []
         },
         {
+          "name": "Items by Title",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var is200Response = responseCode.code === 200;",
+                "",
+                "tests['Response code is 200 OK'] = is200Response;",
+                "",
+                "if(is200Response){",
+                "    var responseJSON = JSON.parse(responseBody);",
+                "",
+                "    tests['Response contains \"items\" property'] = responseJSON.hasOwnProperty('items');",
+                "    tests['Response contains \"itemsCount\" property'] = responseJSON.hasOwnProperty('itemsCount');",
+                "    tests['itemsCount is an integer'] = Number.isInteger(responseJSON.itemsCount);",
+                "",
+                "    if(responseJSON.items.length){",
+                "        var item = responseJSON.items[0];",
+                "",
+                "        tests['Item has \"title\" property'] = item.hasOwnProperty('title');",
+                "        tests['Item has \"slug\" property'] = item.hasOwnProperty('slug');",
+                "        tests['Item has \"body\" property'] = item.hasOwnProperty('body');",
+                "        tests['Item has \"createdAt\" property'] = item.hasOwnProperty('createdAt');",
+                "        tests['Item\\'s \"createdAt\" property is an ISO 8601 timestamp'] = new Date(item.createdAt).toISOString() === item.createdAt;",
+                "        tests['Item has \"updatedAt\" property'] = item.hasOwnProperty('updatedAt');",
+                "        tests['Item\\'s \"updatedAt\" property is an ISO 8601 timestamp'] = new Date(item.updatedAt).toISOString() === item.updatedAt;",
+                "        tests['Item has \"description\" property'] = item.hasOwnProperty('description');",
+                "        tests['Item has \"titleList\" property'] = item.hasOwnProperty('titleList');",
+                "        tests['Item\\'s \"titleList\" property is an Array'] = Array.isArray(item.titleList);",
+                "        tests['Item has \"seller\" property'] = item.hasOwnProperty('seller');",
+                "        tests['Item has \"favorited\" property'] = item.hasOwnProperty('favorited');",
+                "        tests['Item has \"favoritesCount\" property'] = item.hasOwnProperty('favoritesCount');",
+                "        tests['favoritesCount is an integer'] = Number.isInteger(item.favoritesCount);",
+                "    } else {",
+                "        tests['itemsCount is 0 when feed is empty'] = responseJSON.itemsCount === 0;",
+                "    }",
+                "}",
+                ""
+              ]
+            }
+          }],
+          "request": {
+            "url": {
+              "raw": "{{apiUrl}}/items?title=test",
+              "host": [
+                "{{apiUrl}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [{
+                "key": "title",
+                "value": "test"
+              }],
+              "variable": []
+            },
+            "method": "GET",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
           "name": "Create Item",
           "event": [{
             "listen": "test",
